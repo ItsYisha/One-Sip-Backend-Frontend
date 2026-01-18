@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>SipWise - AI Sommelier</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Oswald:wght@400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        /* Bar Leone Inspired Palette */
+        --bg-color: #6D251E; /* Rusty Red / Chianti */
+        --card-bg: rgba(0, 0, 0, 0.25); /* Subtle dark overlay */
+        --primary-gold: #F08C00; /* Aperol/Orange Accent */
+        --text-main: #FDF7E8; /* Cream/Parchment */
+        --text-muted: #D8C8B6; /* Muted Beige */
+        --accent-dark: #42120D; /* Darker red for active states */
+        --wood-dark: #2C1810;
+        --wood-light: #4A2818;
+        --safe-area-bottom: env(safe-area-inset-bottom, 20px);
+      }
+
+      * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        margin: 0;
+        font-family: 'Inter', sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-main);
+        -webkit-font-smoothing: antialiased;
+        min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        background-image: linear-gradient(to bottom, #6D251E, #4a1814);
+      }
+
+      h1, h2, h3 {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        margin: 0;
+        letter-spacing: -0.02em;
+      }
+
+      /* Warm Glass Panel */
+      .glass-panel {
+        background: var(--card-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(253, 247, 232, 0.1); 
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Wine Cabinet specific styles */
+      .cabinet-container {
+        background-color: var(--wood-dark);
+        background-image: 
+          linear-gradient(90deg, transparent 95%, rgba(0,0,0,0.3) 100%),
+          linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+        background-size: 100% 100%, 100% 200px;
+        box-shadow: inset 0 0 100px rgba(0,0,0,0.8);
+      }
+
+      .shelf-row {
+        position: relative;
+        border-bottom: 12px solid #1a0d08;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      }
+
+      .shelf-row::after {
+        content: '';
+        position: absolute;
+        bottom: -12px;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: rgba(255,255,255,0.1);
+      }
+
+      .empty-slot {
+        background: rgba(0,0,0,0.4);
+        border: 1px solid rgba(255,255,255,0.05);
+        box-shadow: inset 0 10px 20px rgba(0,0,0,0.6);
+        border-radius: 4px;
+        aspect-ratio: 1/1.2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(255,255,255,0.05);
+      }
+
+      /* Custom Range Slider */
+      input[type=range] {
+        -webkit-appearance: none; 
+        width: 100%; 
+        background: transparent; 
+      }
+      
+      input[type=range]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        background: var(--primary-gold);
+        cursor: pointer;
+        margin-top: -8px; 
+        border: 2px solid var(--text-main);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      }
+      
+      input[type=range]::-webkit-slider-runnable-track {
+        width: 100%;
+        height: 4px;
+        cursor: pointer;
+        background: rgba(253, 247, 232, 0.2);
+        border-radius: 2px;
+      }
+
+      /* Inputs mobile fix */
+      input, select, textarea {
+        font-size: 16px !important; 
+      }
+
+      /* Animations */
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      .animate-fade-in {
+        animation: fadeIn 0.5s ease-out forwards;
+      }
+
+      /* Bar Leone Style Button - Primary */
+      .btn-primary {
+        background: var(--primary-gold);
+        color: #FFFFFF;
+        border: none;
+        font-family: 'Oswald', sans-serif; 
+        font-weight: 500;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: transform 0.1s, background-color 0.2s;
+        border-radius: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .btn-primary:active {
+        transform: scale(0.96);
+      }
+      
+      @media (hover: hover) {
+        .btn-primary:hover {
+          background-color: #E08200;
+        }
+      }
+
+      /* Bar Leone Style Button - Secondary (Light) */
+      .btn-secondary {
+        background: #FDF7E8;
+        color: #666666;
+        border: 1px solid #BBBBBB;
+        font-family: 'Oswald', sans-serif;
+        font-weight: 500;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: transform 0.1s;
+        border-radius: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .btn-secondary:active {
+        transform: scale(0.96);
+      }
+
+      @media (hover: hover) {
+        .btn-secondary:hover {
+          background-color: #F0EAD6;
+          border-color: #999999;
+          color: #333333;
+        }
+      }
+
+      /* Chip Grid for Refinements */
+      .chip-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-bottom: 24px;
+      }
+
+      .btn-chip {
+        background: rgba(109, 37, 30, 0.08);
+        border: 1px solid rgba(109, 37, 30, 0.2);
+        color: #6D251E;
+        padding: 12px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+      }
+      
+      .btn-chip:active {
+        background: rgba(109, 37, 30, 0.2);
+      }
+
+      /* Scanning animation */
+      .scan-line {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: var(--primary-gold);
+        box-shadow: 0 0 10px var(--primary-gold);
+        animation: scan 2s linear infinite;
+        opacity: 0.8;
+      }
+
+      @keyframes scan {
+        0% { top: 0%; opacity: 0; }
+        10% { opacity: 1; }
+        90% { opacity: 1; }
+        100% { top: 100%; opacity: 0; }
+      }
+      
+      /* Scrollbar hiding */
+      ::-webkit-scrollbar {
+        width: 0px;
+        background: transparent;
+      }
+    </style>
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

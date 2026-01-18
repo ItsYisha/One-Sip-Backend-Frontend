@@ -1,0 +1,16 @@
+{
+  "name": "one-sip-server",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "build": "npm install --prefix ../client && npm run build --prefix ../client && mkdir -p public && cp -r ../client/dist/* public/"
+  },
+  "dependencies": {
+    "@google/genai": "^1.37.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}
